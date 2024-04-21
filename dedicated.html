@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dedicated Server Calculator</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+
+</head>
+
+<body>
+
+    <div class="container mt-5">
+
+        <h1>Dedicated Server Calculator</h1>
+
+        <div class="row">
+
+            <div class="col-md-6">
+
+                <h2>Product Selection</h2>
+
+                <form id="calculator-form">
+
+                    <div class="mb-3">
+
+                        <label for="processor" class="form-label">Processor</label>
+
+                        <select class="form-select" id="processor">
+
+                            <option value="5999">Octa Core</option>
+
+                            <option value="6999">Dual Octa Core</option>
+
+                            <option value="8999">Dodeca Core</option>
+
+                            <option value="9999">Dual Dodeca Core</option>
+
+                        </select>
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-check-label">8 IP Pool</label>
+
+                        <input type="checkbox" class="form-check-input" id="eightIpPool">
+
+                    </div>
+
+                    <div class="mb-3">
+
+                        <label class="form-check-label">Firewall</label>
+
+                        <input type="checkbox" class="form-check-input" id="firewall">
+
+                        <div id="firewall-options" style="display: none;">
+
+                            <div class="form-check">
+
+                                <input class="form-check-input" type="radio" name="firewall-type" id="sharedFirewall" value="shared">
+
+                                <label class="form-check-label" for="sharedFirewall">
+
+                                    Shared Firewall
+
+                                </label>
+
+                            </div>
+
+                            <div class="form-check">
+
+                                <input class="form-check-input" type="radio" name="firewall-type" id="dedicatedFirewall" value="dedicated">
+
+                                <label class="form-check-label" for="dedicatedFirewall">
+
+                                    Dedicated Firewall (1 year commitment)
+
+                                </label>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+            <div class="col-md-6">
+
+                <h2>Results</h2>
+
+                <table class="table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Component</th>
+
+                            <th>Selected Value</th>
+
+                            <th>Price (INR)</th>
+
+                            <th>GST (INR)</th>
+
+                            <th>Total Price (INR)</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>Processor</td>
+
+                            <td id="selectedProcessor"></td>
+
+                            <td id="processorPrice"></td>
+
+                            <td id="processorGst"></td>
+
+                            <td id="processorTotalPrice"></td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>8 IP Pool</td>
+
+                            <td id="selectedEightIpPool">No</td>
+
+                            <td id="eightIpPoolPrice">0</td>
+
+                            <td id="eightIpPoolGst">0</td>
+
+                            <td id="eightIpPoolTotalPrice">0</td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>Firewall</td>
+
+                            <td id="selectedFirewall">No</td>
+
+                            <td id="firewallPrice">0</td>
+
+                            <td id="firewallGst">0</td>
+
+                            <td id="firewallTotalPrice">0</td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>Configuration</td>
+
+                            <td id="configuration"></td>
+
+                            <td id="configurationPrice">0</td>
+
+                            <td id="configurationGst">0</td>
+
+                            <td id="configurationTotalPrice">0</td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>Total Price (INR)</td>
+
+                            <td></td>
+
+                            <td id="totalPrice"></td>
+
+                            <td id="totalGst"></td>
+
+                            <td id="totalPriceWithGst"></td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+                <div id="firewallInfo"></div>
+
+                <div id="contact-details">
+                    <p>Contact us at: <a href="mailto:divyansh.joshi@rackbank.com">divyansh.joshi@rackbank.com</a></p>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <script>
+
+        // Update selected values and calculate total price
+
+        function updateValues() {
+
+            const processor = parseInt(document.getElementById('processor').value);
+
+            const eightIpPool = document.getElementById('eightIpPool').checked;
+
+            const firewall = document.getElementById('firewall').checked;
+
+            const firewallType = document.querySelector('input[name="firewall-type"]:checked');
+
+
+
+            document.getElementById('selectedProcessor').textContent = document.getElementById('processor').selectedOptions[0].text;
+
+            document.getElementById('selectedEightIpPool').textContent = eightIpPool ? 'Yes' : 'No';
+
+            document.getElementById('selectedFirewall').textContent = firewall ? 'Yes' : 'No';
+
+            document.getElementById('firewall-options').style.display = firewall ? 'block' : 'none';
+
+            document.getElementById('firewallInfo').innerHTML = '';
+
+
+
+            if (firewall && firewallType) {
+
+                const firewallInfo = document.getElementById('firewallInfo');
+
+                if (firewallType.value === 'shared') {
+
+                    firewallInfo.innerHTML = '<p>Shared Firewall will cost Rs. 3000 + GST on a Monthly Basis</p>';
+
+                } else if (firewallType.value === 'dedicated') {
+
+                    firewallInfo.innerHTML = '<p>Dedicated Firewall comes with a One Year commitment. Contact us to know more details.</p>';
+
+                }
+
+            }
+
+            else {
+
+                document.getElementById('firewallInfo').innerHTML = '';
+
+            }
+
+
+
+            const processorPrice = processor;
+
+            const eightIpPoolPrice = eightIpPool ? 800 : 0;
+
+            const firewallPrice = firewall ? 0 : 0;
+
+            const ramPrice = 0;
+
+            const ssdPrice = 0;
+
+            const dataTransferPrice = 0;
+
+            const ipPoolPrice = 0;
+
+            const totalPrice = processorPrice + eightIpPoolPrice + firewallPrice + ramPrice + ssdPrice + dataTransferPrice + ipPoolPrice;
+
+
+
+            const configuration = `Intel Xeon ${document.getElementById('processor').selectedOptions[0].text} processor. 32 GB RAM 960 GB SSD 1TB Data Transfer @1GBPS 4 IP Pool (1 Usable)`;
+
+            const configurationPrice = processorPrice;
+
+            const configurationGst = configurationPrice * 0.18;
+
+            const configurationTotalPrice = configurationPrice + configurationGst;
+
+
+
+            const gst = (totalPrice + firewallPrice) * 0.18;
+
+            const totalPriceWithGst = totalPrice + gst;
+
+
+
+            document.getElementById('processorPrice').textContent = processorPrice;
+
+            document.getElementById('eightIpPoolPrice').textContent = eightIpPoolPrice;
+
+            document.getElementById('firewallPrice').textContent = firewallPrice;
+
+            document.getElementById('configuration').textContent = configuration;
+
+            document.getElementById('configurationPrice').textContent = configurationPrice;
+
+            document.getElementById('configurationGst').textContent = configurationGst;
+
+            document.getElementById('configurationTotalPrice').textContent = configurationTotalPrice;
+
+            document.getElementById('totalPrice').textContent = totalPrice;
+
+            document.getElementById('totalGst').textContent = gst;
+
+            document.getElementById('totalPriceWithGst').textContent = totalPriceWithGst;
+
+        }
+
+
+
+        // Attach event listeners
+
+        document.getElementById('processor').addEventListener('change', updateValues);
+
+        document.getElementById('eightIpPool').addEventListener('change', updateValues);
+
+        document.getElementById('firewall').addEventListener('change', updateValues);
+
+        document.querySelectorAll('input[name="firewall-type"]').forEach((radio) => {
+
+            radio.addEventListener('change', updateValues);
+
+        });
+
+
+
+        // Initial update
+
+        updateValues();
+
+    </script>
+
+</body>
+
+</html>
